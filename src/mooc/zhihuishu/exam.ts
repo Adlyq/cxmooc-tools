@@ -1,16 +1,16 @@
-import {createBtn, substrex, randNumber, protocolPrompt} from "@App/internal/utils/utils";
+import {createBtn, randNumber, substrex} from "@App/internal/utils/utils";
 import "../../views/common";
-import {Topic, QueryQuestions} from "@App/internal/app/topic";
+import {QueryQuestions, Topic} from "@App/internal/app/topic";
 import {
-    Question,
-    ToolsQuestionBankFacade,
-    TopicType,
-    SwitchTopicType,
-    TopicStatus,
     Answer,
-    TopicStatusString,
     PushAnswer,
-    QuestionStatusString
+    Question,
+    QuestionStatusString,
+    SwitchTopicType,
+    ToolsQuestionBankFacade,
+    TopicStatus,
+    TopicStatusString,
+    TopicType
 } from "@App/internal/app/question";
 import {CreateNoteLine} from "../chaoxing/utils";
 import {Mooc} from "@App/internal/app/mooc";
@@ -77,7 +77,7 @@ export class ZhsExam implements Mooc {
         el.append(btn);
         let self = this;
         btn.onclick = async function () {
-            protocolPrompt("你正准备使用智慧树答题功能,相应的我们需要你的正确答案,因为智慧树的机制问题,采集答案会导致无法重新作答,你是否愿意贡献你的答案?\n* 本项选择不会影响你的正常使用(协议当前版本有效)\n* 手动点击答题结果页面自动采集页面答案\n* (功能其实还没完成,后续更新)", "zhs_answer_collect", "我同意");
+            //protocolPrompt("你正准备使用智慧树答题功能,相应的我们需要你的正确答案,因为智慧树的机制问题,采集答案会导致无法重新作答,你是否愿意贡献你的答案?\n* 本项选择不会影响你的正常使用(协议当前版本有效)\n* 手动点击答题结果页面自动采集页面答案\n* (功能其实还没完成,后续更新)", "zhs_answer_collect", "我同意");
 
             btn.innerText = "搜索中...";
             let ret = await self.topic.QueryAnswer();
@@ -136,8 +136,8 @@ abstract class ZhsQuestion implements Question {
     }
 
     public GetTopic(): string {
-        let el = this.el.querySelector(".subject_type_describe.fl .subject_describe");
-        return el.innerHTML;
+        return (this.el.querySelector(".subject_type_describe.fl .subject_describe")
+            .firstChild.firstChild as Element).shadowRoot.textContent;
     }
 
     protected removeNotice() {

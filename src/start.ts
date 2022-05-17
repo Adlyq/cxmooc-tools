@@ -58,7 +58,11 @@ class start implements Launcher {
 
 async function init() {
     let component = new Map<string, any>().set("config", new ChromeConfigItems(await NewBackendConfig())).set("logger", new ConsoleLog());
-
+    // @ts-ignore
+    Element.prototype.mns = Element.prototype.attachShadow;
+    Element.prototype.attachShadow = function () {
+        return this.mns( { mode: "open" } );
+    };
     let application = new Application(Content, new start(), component);
     application.run();
 }
